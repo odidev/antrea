@@ -49,8 +49,18 @@ verify_kustomize() {
         >&2 echo "Unsupported OS type $OSTYPE"
         return 1
     fi
+    local machinetype=$(uname -m)
+    local arch=""
+    if [[ "$machinetype" == "x86_64" ]]; then
+        arch="amd64"
+    elif [[ "$machinetype" == "aarch64" ]]; then
+        arch="arm64"
+    else
+        >&2 echo "Unsupported machine type $machinetype"
+        return 1
+    fi
     >&2 echo "Installing kustomize"
-    local kustomize_url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/${_KUSTOMIZE_VERSION}/kustomize_${_KUSTOMIZE_VERSION}_${ostype}_amd64.tar.gz"
+    local kustomize_url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/${_KUSTOMIZE_VERSION}/kustomize_${_KUSTOMIZE_VERSION}_${ostype}_${arch}.tar.gz"
     curl -sLo kustomize.tar.gz "${kustomize_url}" || return 1
     mkdir -p "$_BINDIR" || return 1
     tar -xzf kustomize.tar.gz -C "$_BINDIR" || return 1

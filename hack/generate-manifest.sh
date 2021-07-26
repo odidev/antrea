@@ -459,7 +459,7 @@ if [ "$MODE" == "dev" ]; then
         if $COVERAGE; then
             IMG_NAME="antrea/antrea-ubuntu-coverage:latest"
         else
-            IMG_NAME="projects.registry.vmware.com/antrea/antrea-ubuntu:latest"
+            IMG_NAME="antrea/antrea-ubuntu:latest"
         fi
     fi
 

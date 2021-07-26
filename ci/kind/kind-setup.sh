@@ -19,7 +19,7 @@
 # and docker bridge network connecting to worker Node.
 
 CLUSTER_NAME=""
-ANTREA_IMAGE="projects.registry.vmware.com/antrea/antrea-ubuntu:latest"
+ANTREA_IMAGE="antrea/antrea-ubuntu:latest"
 IMAGES=$ANTREA_IMAGE
 ANTREA_CNI=true
 POD_CIDR="10.10.0.0/16"
@@ -75,9 +75,9 @@ function get_encap_mode {
 function modify {
   node="$1"
   peerIdx=$(docker exec "$node" ip link | grep eth0 | awk -F[@:] '{ print $3 }' | cut -c 3-)
-  peerName=$(docker run --net=host antrea/ethtool:latest ip link | grep ^"$peerIdx": | awk -F[:@] '{ print $2 }' | cut -c 2-)
+  peerName=$(docker run --net=host odidev/ethtool:latest ip link | grep ^"$peerIdx": | awk -F[:@] '{ print $2 }' | cut -c 2-)
   echo "Disabling TX checksum offload for node $node ($peerName)"
-  docker run --net=host --privileged antrea/ethtool:latest ethtool -K "$peerName" tx off
+  docker run --net=host --privileged odidev/ethtool:latest ethtool -K "$peerName" tx off
 }
 
 function configure_networks {
@@ -92,9 +92,9 @@ function configure_networks {
   # Inject allow all iptables to preempt docker bridge isolation rules
   if [[ ! -z $SUBNETS ]]; then
     set +e
-    docker run --net=host --privileged antrea/ethtool:latest iptables -C DOCKER-USER -j ACCEPT > /dev/null 2>&1
+    docker run --net=host --privileged odidev/ethtool:latest iptables -C DOCKER-USER -j ACCEPT > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
-      docker run --net=host --privileged antrea/ethtool:latest iptables -I DOCKER-USER -j ACCEPT
+      docker run --net=host --privileged odidev/ethtool:latest iptables -I DOCKER-USER -j ACCEPT
     fi
     set -e
   fi

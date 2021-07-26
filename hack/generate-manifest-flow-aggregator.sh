@@ -156,7 +156,7 @@ if [ "$MODE" == "dev" ]; then
     if $COVERAGE; then
         $KUSTOMIZE edit set image flow-aggregator=antrea/flow-aggregator-coverage:latest
     else
-        $KUSTOMIZE edit set image flow-aggregator=projects.registry.vmware.com/antrea/flow-aggregator:latest
+        $KUSTOMIZE edit set image flow-aggregator=odidev/flow-aggregator:latest
     fi
 
     $KUSTOMIZE edit add patch --path imagePullPolicy.yml

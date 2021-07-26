@@ -103,7 +103,7 @@ else
     manifest_args="$manifest_args --no-np"
 fi
 
-COMMON_IMAGES_LIST=("gcr.io/kubernetes-e2e-test-images/agnhost:2.8" "projects.registry.vmware.com/library/busybox" "projects.registry.vmware.com/antrea/nginx" "projects.registry.vmware.com/antrea/perftool" "projects.registry.vmware.com/antrea/ipfix-collector:v0.5.4")
+COMMON_IMAGES_LIST=("gcr.io/kubernetes-e2e-test-images/agnhost:2.8" "busybox:1.33.1" "nginx:latest" "odidev/perftool" "odidev/ipfix-collector:latest")
 for image in "${COMMON_IMAGES_LIST[@]}"; do
     for i in `seq 3`; do
         docker pull $image && break
@@ -115,8 +115,8 @@ if $coverage; then
     COMMON_IMAGES_LIST+=("antrea/antrea-ubuntu-coverage:latest")
     COMMON_IMAGES_LIST+=("antrea/flow-aggregator-coverage:latest")
 else
-    COMMON_IMAGES_LIST+=("projects.registry.vmware.com/antrea/antrea-ubuntu:latest")
-    COMMON_IMAGES_LIST+=("projects.registry.vmware.com/antrea/flow-aggregator:latest")
+    COMMON_IMAGES_LIST+=("antrea/antrea-ubuntu:latest")
+    COMMON_IMAGES_LIST+=("odidev/flow-aggregator:latest")
 fi
 
 printf -v COMMON_IMAGES "%s " "${COMMON_IMAGES_LIST[@]}"
